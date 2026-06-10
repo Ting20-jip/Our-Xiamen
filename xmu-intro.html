@@ -285,14 +285,15 @@
             }
             /* 移动端悬浮面板：固定于底部，不超出屏幕 */
             .floating-panel {
-                width: 90vw !important;
-                left: 5% !important;
-                right: 5% !important;
-                bottom: 20px;
+                position: relative !important;
+                width: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
                 top: auto !important;
-                transform: none !important;
-                max-height: 70vh;
-                overflow-y: auto;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                box-shadow: var(--shadow-sm);
             }
             /* 缩小banner副标题字号 */
             .banner-xmu .page-banner-subtitle {
@@ -452,7 +453,7 @@
         const data = spotsData[spotKey];
         if (!data) return;
 
-        // 如果点击的是同一个图标且已打开，则关闭
+        // 如果已经打开同一个图标的面板，则关闭
         if (currentIcon === icon && currentPanel) {
             closePanel();
             return;
@@ -470,36 +471,49 @@
         const panel = document.createElement('div');
         panel.className = 'floating-panel';
         panel.innerHTML = `
-            <div class="clearfix">
-                <img src="${data.img}" alt="${data.title}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 24 24\' fill=\'%23D7422A\'%3E%3Cpath d=\'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 8h-4v4h-4v-4H6V9h4V5h4v4h4v2z\'/%3E%3C/svg%3E'">
-                <h4>${data.title}</h4>
-                <p>${data.desc}</p>
-            </div>
-        `;
+        <div class="clearfix">
+            <img src="${data.img}" alt="${data.title}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 24 24\' fill=\'%23D7422A\'%3E%3Cpath d=\'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 8h-4v4h-4v-4H6V9h4V5h4v4h4v2z\'/%3E%3C/svg%3E'">
+            <h4>${data.title}</h4>
+            <p>${data.desc}</p>
+        </div>
+    `;
 
-        // 桌面端：将面板添加到 .map-center 内，并相对于地图容器定位
-        const mapContainer = document.querySelector('.map-center');
-        if (window.innerWidth > 768 && mapContainer) {
-            mapContainer.appendChild(panel);
-            panel.style.display = 'block';
-
-            // 计算面板位置（相对于 .map-center）
-            const iconRect = icon.getBoundingClientRect();
-            const containerRect = mapContainer.getBoundingClientRect();
-            // 面板默认宽度 400px，防止超出右侧边界
-            let left = iconRect.left - containerRect.left + 60;   // 图标右侧偏移
-            let top = iconRect.top - containerRect.top - 20;      // 图标上方偏移
-            // 边界检查
-            if (left + 400 > containerRect.width) {
-                left = iconRect.left - containerRect.left - 420;   // 显示在左侧
+        if (window.innerWidth > 768) {
+            // 桌面端：添加到 .map-center 内，绝对定位在图标旁边
+            const mapContainer = document.querySelector('.map-center');
+            if (mapContainer) {
+                mapContainer.appendChild(panel);
+                panel.style.display = 'block';
+                const iconRect = icon.getBoundingClientRect();
+                const containerRect = mapContainer.getBoundingClientRect();
+                let left = iconRect.left - containerRect.left + 60;
+                let top = iconRect.top - containerRect.top - 20;
+                if (left + 400 > containerRect.width) {
+                    left = iconRect.left - containerRect.left - 420;
+                }
+                if (top < 0) top = iconRect.top - containerRect.top + 40;
+                panel.style.left = left + 'px';
+                panel.style.top = top + 'px';
+                panel.style.position = 'absolute';
             }
-            if (top < 0) top = iconRect.top - containerRect.top + 40;
-            panel.style.left = left + 'px';
-            panel.style.top = top + 'px';
         } else {
-            // 移动端：添加到 body，使用底部固定样式（CSS 已处理）
-            document.body.appendChild(panel);
-            panel.style.display = 'block';
+            // 移动端：添加到 .mobile-icon-container 之后（作为静态块）
+            const mobileContainer = document.querySelector('.mobile-icon-container');
+            if (mobileContainer && mobileContainer.parentNode) {
+                mobileContainer.parentNode.insertBefore(panel, mobileContainer.nextSibling);
+                panel.style.display = 'block';
+                panel.style.position = 'relative';
+                panel.style.marginTop = '10px';
+                panel.style.marginBottom = '20px';
+            } else {
+                // 备选：添加到 .map-center 后面
+                const mapCenter = document.querySelector('.map-center');
+                if (mapCenter && mapCenter.parentNode) {
+                    mapCenter.parentNode.insertBefore(panel, mapCenter.nextSibling);
+                    panel.style.display = 'block';
+                    panel.style.position = 'relative';
+                }
+            }
         }
         currentPanel = panel;
     }
