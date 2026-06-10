@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кухня Сямэня</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 美食页面专属样式 */
+    .food-section {
+      padding: 50px 0;
+      background: var(--white);
+    }
+    .food-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin-top: 30px;
+    }
+    .page-banner-title {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    /* 卡片：左右布局 */
+    .food-card {
+      background: var(--cream);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.35s ease;
+      border: 1px solid rgba(201,169,110,0.2);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .food-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--gold-light);
+    }
+    /* 左侧图片容器：宽度占卡片的35% */
+    .food-card-image {
+      flex: 0 0 35%;
+      text-align: center;
+    }
+    .food-card-image img {
+      width: 80%;          /* 相对图片容器缩小到80% */
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      object-fit: cover;
+      background: #fff0e0;
+    }
+    .food-card-image img:hover {
+      transform: scale(1.02);
+    }
+    /* 右侧文字内容 */
+    .food-card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .food-name {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--gold-light);
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+    .food-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-lighter);
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+    .food-desc {
+      color: var(--text-light);
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+    .food-ingredients {
+      font-size: 0.8rem;
+      color: #777;
+      background: rgba(0,0,0,0.03);
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: inline-block;
+      width: fit-content;
+    }
+    /* 返回顶部按钮 */
+    .back-to-top {
+      display: inline-block;
+      margin-top: 40px;
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: none;
+      border: 2px solid var(--blue);
+      padding: 10px 24px;
+      border-radius: 30px;
+      transition: all 0.3s;
+    }
+    .back-to-top:hover {
+      background: var(--blue);
+      color: #fff;
+    }
+    /* 响应式：移动端改为上下布局 */
+    @media (max-width: 768px) {
+      .food-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+      }
+      .food-card-image {
+        flex: 0 0 auto;
+        width: 100%;
+      }
+      .food-card-image img {
+        width: 60%;
+        max-width: 200px;
+      }
+      .food-name {
+        align-self: center;
+      }
+      .food-ingredients {
+        align-self: center;
+      }
+    }
+    .banner-xmu {
+      background: none !important;   /* 清除原有渐变背景 */
+      position: relative;
+    }
+
+    .banner-xmu::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('images/meishi.jpg');  /* 👈 请改成您的图片路径 */
+      background-size: cover;
+      background-position: center;
+      opacity: 0.7;        /* 70% 不透明度（即 30% 透明） */
+      z-index: 0;
+      pointer-events: none;  /* 让背景不影响点击文字 */
+    }
+
+    /* 确保文字在图片之上 */
+    .banner-xmu .page-banner-overlay {
+      z-index: 1;
+    }
+    .banner-xmu .page-banner-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 可选：如果图片背景较亮导致白色文字看不清，可以加深文字颜色或添加阴影 */
+    .banner-xmu .page-banner-title,
+    .banner-xmu .page-banner-subtitle {
+      color: #fff;          /* 保持白色，或改为深色如 #333 */
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);  /* 增强可读性 */
+    }
+  </style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="container header-inner">
+    <div class="logo-area">
+      <a href="index.html" class="logo-link">
+        <div class="logo-text">
+          <span class="site-title">Остров цапли</span>
+        </div>
+      </a>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">🏝️ Сямэнь</a></li>
+        <li><a href="gulangyu.html">🎵 Гуланъюй</a></li>
+        <li><a href="xmu-intro.html">📖 Сямэньский<br>университет</a></li>
+        <li><a href="meishi.html" class="active">🍜 Кухня</a></li>
+      </ul>
+    </nav>
+    <button class="mobile-menu-btn" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="page-banner banner-xmu">
+  <div class="page-banner-overlay"></div>
+  <div class="container page-banner-content">
+    <p class="page-banner-title">Пять блюд, которые нужно попробовать</p>
+  </div>
+</section>
+
+<main class="food-section">
+  <div class="container">
+    <div class="ornament-heading">
+      <span class="ornament-line"></span>
+      <span class="ornament-diamond">◆</span>
+      <span class="ornament-line"></span>
+    </div>
+    <h3 class="content-title">Местные деликатесы</h3>
+
+    <div class="food-grid">
+      <!-- 1. 沙茶面 -->
+      <div class="food-card">
+        <div class="food-card-image">
+          <img src="images/shachamian.jpg" alt="Лапша шача">
+        </div>
+        <div class="food-card-body">
+          <h4 class="food-name">Лапша в соусе шача</h4>
+          <p class="food-desc">
+            Лапша подаётся в густом ароматном бульоне с соусом шача, который готовят из арахиса, сушёной рыбы, специй и креветочной пасты. Обычно добавляют креветки, кальмаров, тофу, мясо или рыбные шарики. Вкус одновременно ореховый, солоноватый и слегка острый.
+          </p>
+        </div>
+      </div>
+
+      <!-- 2. 蚵仔煎 -->
+      <div class="food-card">
+        <div class="food-card-image">
+          <img src="images/kezaijian.jpg" alt="kezaijian">
+        </div>
+        <div class="food-card-body">
+          <h4 class="food-name">Омлет с устрицами</h4>
+          <p class="food-desc">
+            Устрицы смешивают с яйцом и бататовым крахмалом, благодаря чему получается необычная тягучая текстура.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3. 姜母鸭 -->
+      <div class="food-card">
+        <div class="food-card-image">
+          <img src="images/jiangmuya.jpg" alt="jiangmuya">
+        </div>
+        <div class="food-card-body">
+          <h4 class="food-name">Утка с имбирём</h4>
+          <p class="food-desc">
+            Утку долго тушат с большим количеством имбиря, рисовым вином и соевым соусом.
+          </p>
+        </div>
+      </div>
+
+      <!-- 4. 四果汤 -->
+      <div class="food-card">
+        <div class="food-card-image">
+          <img src="images/siguotang.jpg" alt="Фруктовый десерт">
+        </div>
+        <div class="food-card-body">
+          <h4 class="food-name">Фруктовый десерт</h4>
+          <p class="food-desc">
+            Холодный десерт из льда, фруктов, желе, фасоли и сиропа.
+          </p>
+        </div>
+      </div>
+
+      <!-- 5. 烧仙草 -->
+      <div class="food-card">
+        <div class="food-card-image">
+          <img src="images/shaoxiancao.jpg" alt="Десерт из травяного желе">
+        </div>
+        <div class="food-card-body">
+          <h4 class="food-name">Десерт из травяного желе</h4>
+          <p class="food-desc">
+            Популярный десерт из травяного желе с фасолью, арахисом, таро и сгущённым молоком.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;">
+      <a href="#" class="back-to-top">↑ Наверх</a>
+    </div>
+  </div>
+</main>
+
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Сямэнь</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-100px) scale(1.2); }
+    }
+
+    @keyframes gentleWobble {
+      0%,100%{ transform: rotate(0deg); }
+      25%{ transform: rotate(3deg); }
+      75%{ transform: rotate(-3deg); }
+    }
+    .team-photo {
+      background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%);
+      padding: 50px 0 30px;
+      text-align: center;
+      border-top: 1px solid var(--gold-light);
+    }
+
+    .team-photo-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .team-photo-inner img {
+      width: 120%;
+      height: auto;
+      border-radius: 32px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+      transition: transform 0.3s ease;
+    }
+
+    .team-photo-inner img:hover {
+      transform: scale(1.01);
+    }
+
+    .team-caption {
+      margin-top: 20px;
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      color: var(--red);
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .team-photo {
+        padding: 30px 0 20px;
+      }
+      .team-caption {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="container header-inner">
+    <div class="logo-area">
+      <a href="index.html" class="logo-link">
+        <div class="logo-area">
+          <a href="index.html" class="logo-link">
+            <div class="logo-text">
+              <span class="site-title">Остров цапли</span>
+            </div>
+          </a>
+        </div>
+      </a>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html" class="active">🏝️ Сямэнь</a></li>
+        <li><a href="gulangyu.html">🎵 Гуланъюй</a></li>
+        <li><a href="xmu-intro.html">📖 Сямэньский<br>университет</a></li>
+        <li><a href="meishi.html">🍜 Кухня</a></li>
+      </ul>
+    </nav>
+    <button class="mobile-menu-btn" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="hero-banner">
+  <div class="hero-slide">
+    <div class="hero-overlay"></div>
+    <div class="hero-content container">
+      <span class="hero-badge">✨ добро пожаловать ✨</span>
+      <h2 class="hero-title" style="font-weight: bold; text-shadow: 0 2px 6px rgba(0,0,0,0.5)">Сямэнь — <br>цветущий сад на море</h2>
+      <p class="hero-desc" style="font-weight: bold; text-shadow: 0 2px 6px rgba(0,0,0,0.5)">
+        Город, где волны встречаются с берегом, <br>
+        а старинные виллы хранят атмосферу прошлого.
+      </p>
+      <div class="hero-btns">
+        <a href="gulangyu.html" class="btn btn-primary">🎹 Гуланъюй</a>
+        <a href="xmu-intro.html" class="btn btn-outline">📚 Сямэньский университет</a>
+        <a href="meishi.html" class="btn btn-primary">🍜 Кухня</a>
+      </div>
+    </div>
+    <div class="hero-pattern"></div>
+    <div class="floating-bubbles">
+      <div class="bubble" style="left: 10%; animation-duration: 8s;"></div>
+      <div class="bubble" style="left: 25%; animation-duration: 12s;"></div>
+      <div class="bubble" style="left: 70%; animation-duration: 6s;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 引言区 可爱风格 -->
+<section class="intro-quote">
+  <div class="container">
+    <div class="quote-block">
+      <span class="quote-mark">🌸</span>
+      <p class="quote-text">
+        Здесь среди цветущих аллей и морского бриза<br>история гармонично переплетается с современной жизнью.</p>
+      <div class="ornament-divider">
+        <span class="ornament-line"></span>
+        <span class="ornament-diamond">🐚</span>
+        <span class="ornament-line"></span>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="team-photo">
+  <div class="container">
+    <div class="team-photo-inner">
+      <img src="images/hezhao.png" alt="Наша команда">
+      <p class="team-caption">✨ МЫ ✨</p>
+    </div>
+  </div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>

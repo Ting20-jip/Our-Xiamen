@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Гуланъюй</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 针对 gulangyu 页面的额外样式 */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 1. 更换图1背景为图片 + 透明度60% */
+    .banner-gulangyu {
+      position: relative;
+      background: none;
+    }
+
+    .banner-gulangyu::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('images/gulangyu.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.6;
+      z-index: 0;
+    }
+
+    .banner-gulangyu .page-banner-overlay {
+      background: radial-gradient(ellipse at 40% 60%, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%);
+      z-index: 1;
+    }
+
+    .page-banner-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .page-banner-title,
+    .page-banner-subtitle {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .page-banner-subtitle {
+      animation-delay: 0.2s;
+      opacity: 0;
+    }
+    .page-banner-title {
+      font-size: 2.4rem;
+      line-height: 1.3;
+      letter-spacing: 2px;
+    }
+
+    .page-banner-subtitle {
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .page-banner-title { font-size: 1.6rem; }
+      .page-banner-subtitle { font-size: 1rem; }
+    }
+
+    .main-nav a:hover { animation: gentleWobble 0.3s ease; }
+
+    /* ========= 轮播样式（优化垂直居中） ========= */
+    .carousel-container {
+      display: flex;
+      align-items: center;      /* 垂直居中 */
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+      margin-top: 20px;
+    }
+    /* 父容器：固定高度 + 相对定位 */
+    .carousel-slides {
+      flex: 1;
+      position: relative;        /* 关键：让绝对定位的子元素相对此容器定位 */
+      height: 580px;            /* 固定高度（以第二段文字为准，可微调） */
+      overflow: hidden;
+    }
+
+    /* 每个轮播项：绝对定位，填满父容器，并用 flex 垂直居中内容 */
+    .carousel-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;             /* 继承父容器高度 */
+      display: flex;
+      align-items: center;      /* 垂直居中 */
+      justify-content: center;  /* 水平居中（可选） */
+      opacity: 0;
+      transform: translateX(30px);
+      transition: all 0.4s ease-in-out;
+      pointer-events: none;
+    }
+
+    /* 当前活动项恢复显示 */
+    .carousel-slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    /* 段落本身宽度自适应，不破坏居中 */
+    .carousel-slide p {
+      width: 100%;
+      margin: 0;
+      line-height: 1.8;
+      color: var(--text-light);
+      font-size: 1.2rem;
+    }
+    .carousel-arrow {
+      background: var(--cream-dark);
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--red);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+      /* 确保箭头自身垂直居中（如果父级 align-items 未完全生效，用 margin 辅助） */
+      margin: auto 0;
+    }
+    .carousel-arrow:hover {
+      background: var(--red);
+      color: white;
+      border-color: var(--red);
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md);
+    }
+    .carousel-arrow:active {
+      transform: scale(0.95);
+    }
+    @media (max-width: 768px) {
+      .carousel-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 1.5rem;
+      }
+      .carousel-slides {
+        min-height: 580px;
+      }
+    }
+    .carousel-slide p {
+      line-height: 1.8;
+      color: var(--text-light);
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    /* ========= 图标栏样式 ========= */
+    .carousel-icons {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 30px;
+      padding: 0 20px;
+    }
+    /* 图标栏布局调整 */
+    .carousel-icons {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      margin-top: 30px;
+      padding: 0 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* 每个装饰组（三个点） */
+    .dot-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* 单个装饰点 */
+    .dot {
+      font-size: 1.3rem;
+      transition: all 0.2s ease;
+      opacity: 0.7;
+      display: inline-block;
+    }
+
+    /* 流动动画：放大 + 还原 */
+    .dot-flow {
+      animation: flowPulse 0.4s ease-in-out forwards;
+    }
+
+    @keyframes flowPulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.8); opacity: 1; filter: drop-shadow(0 0 4px gold); }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+
+    /* 响应式微调 */
+    @media (max-width: 768px) {
+      .dot {
+        font-size: 1rem;
+      }
+      .dot-group {
+        gap: 4px;
+      }
+    }
+    .icon-item {
+      font-size: 2.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: var(--cream);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid var(--gold-light);
+    }
+    .icon-item:hover {
+      transform: scale(1.08);
+      border-color: var(--red);
+      background: var(--white);
+    }
+    /* 抖动动画 */
+    .icon-shake {
+      animation: iconShake 0.3s ease-in-out 0s 2;
+    }
+    @keyframes iconShake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+      100% { transform: translateX(0); }
+    }
+    @media (max-width: 768px) {
+      .icon-item {
+        width: 55px;
+        height: 55px;
+        font-size: 1.6rem;
+      }
+    }
+    /* 博物馆散落图片 - 修复版 */
+    #museumImagesContainer {
+      pointer-events: none; /* 容器不拦截点击，但内部图片可点击 */
+    }
+    .museum-img {
+      position: absolute;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: all 0.25s ease;
+      border-radius: 20px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+      background: #fff;
+      padding: 4px;
+      width: 110px;
+      height: auto;
+      object-fit: cover;
+      z-index: 50;
+    }
+    .museum-img:hover {
+      transform: scale(1.1) rotate(0deg) !important;
+      z-index: 200;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+    }
+    @media (max-width: 768px) {
+      .museum-img {
+        width: 75px;
+      }
+    }
+    .museum-layout {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 20px 10px;
+    }
+
+    .museum-row {
+      display: flex;
+      justify-content: center;
+      gap: 100px;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+    .museum-middle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0;
+    }
+
+    .museum-side {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    .museum-text-container {
+      flex: 2;
+      min-width: 260px;
+      background: var(--cream);
+      border-radius: 48px;
+      padding: 28px 35px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+      line-height: 1.75;
+      color: var(--text-light);
+      z-index: 2;
+    }
+
+    /* 图片通用样式 */
+    .museum-img-fixed {
+      width: 110px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+      background: #fff;
+      padding: 5px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      display: block;
+      object-fit: cover;
+    }
+    .museum-img-fixed:hover {
+      transform: scale(1.08) rotate(0deg) !important;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+
+    @media (max-width: 768px) {
+      .museum-img-fixed {
+        width: 70px;
+      }
+      .museum-middle {
+        flex-direction: column;
+      }
+      .museum-side {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .museum-row {
+        gap: 10px;
+      }
+    }
+    .guide-content {
+      padding: 8px 0;
+    }
+    .guide-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--red);
+      margin-bottom: 12px;
+      border-left: 5px solid var(--gold);
+      padding-left: 15px;
+    }
+    .guide-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 10px 0 15px;
+    }
+    .guide-list li {
+      padding: 5px 0;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .guide-list li::before {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="container header-inner">
+    <div class="logo-area">
+      <a href="index.html" class="logo-link">
+        <div class="logo-text">
+          <span class="site-title">Остров цапли</span>
+        </div>
+      </a>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">🏝️ Сямэнь</a></li>
+        <li><a href="gulangyu.html" class="active">🎵 Гуланъюй</a></li>
+        <li><a href="xmu-intro.html">📖 Сямэньский<br>университет</a></li>
+        <li><a href="meishi.html">🍜 Кухня</a></li>
+      </ul>
+    </nav>
+    <button class="mobile-menu-btn" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- 页面标题横幅（图1） -->
+<section class="page-banner banner-gulangyu">
+  <div class="page-banner-overlay"></div>
+  <div class="container page-banner-content">
+    <h2 class="page-banner-title">Остров Гуланъюй</h2>
+    <p class="page-banner-subtitle">всемирное наследие и визитная карточка города Сямэнь</p>
+  </div>
+</section>
+
+<main class="page-main">
+  <div class="container">
+    <!-- 简介区 -->
+    <section class="content-section">
+      <div class="ornament-heading">
+        <span class="ornament-line"></span>
+        <span class="ornament-diamond">◆</span>
+        <span class="ornament-line"></span>
+      </div>
+
+      <!-- 轮播容器 -->
+      <div class="carousel-container">
+        <button class="carousel-arrow carousel-arrow-left" id="prevBtn">‹</button>
+        <div class="carousel-slides">
+          <div class="carousel-slide active" style="display: flex; align-items: center;">
+            <p style="font-size: 1.5rem;">
+              <span class="highlight">Остров Гуланъюй</span> — это уникальное место, где оживает история Китая. Здесь располагалась военная база легендарного национального героя Чжэн Чэнгуна. Древняя тренировочная площадка хранит память о героическом прошлом: закрыв глаза, можно услышать отзвуки барабанного боя, эхом доносящегося из глубины трёхвековой истории. На прибрежных камнях сохранились многочисленные надписи, оставленные выдающимися поэтами и мыслителями минувших эпох.
+            </p>
+          </div>
+          <div class="carousel-slide">
+            <div class="guide-content">
+              <h3 class="guide-title">Как добраться?</h3>
+              <p>Единственный способ попасть на остров — переплыть на пароме. Важно заранее ознакомиться с расписанием паромов, расположением портов и особенностями маршрутов.</p>
+              <p>На острове действует уникальная система передвижения. Сейчас, как и сто лет назад, основным средством перевозки грузов остаются традиционные ручные тележки. Для комфортной прогулки рекомендуем:</p>
+              <ul class="guide-list">
+                <li>👟 Выбрать удобную обувь</li>
+                <li>🗺️ Заранее спланировать маршрут</li>
+                <li>🧴 Намазаться солнцезащитным кремом</li>
+              </ul>
+              <h3 class="guide-title" style="margin-top: 20px;">Что посмотреть?</h3>
+              <ul class="guide-list">
+                <li>🏛️ Историческая тренировочная площадка Чжэн Чэнгуна</li>
+                <li>🌿 Живописный сад Шучжуан</li>
+                <li>🎵 Музей органной музыки</li>
+                <li>🌅 Смотровая площадка Жигуанъянь</li>
+              </ul>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="accommodation-content">
+              <h3 class="highlight" style="font-size: 1.5rem">Где остановиться?</h3>
+              <p>Вилла «Хуанцзя Хуаюань» — уникальное место для проживания, известное как «Первая вилла Китая». Это не просто отель, а объект культурного наследия государственного значения, где современный сервис сочетается с атмосферой старинной аристократии. Стоимость проживания лишь незначительно превышает стандартный гостиничный тариф, а впечатления от пребывания останутся на всю жизнь.</p>
+              <p class="conclusion">Гуланъюй, где каждый найдёт что-то особенное для себя.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-arrow carousel-arrow-right" id="nextBtn">›</button>
+      </div>
+      <!-- 三个图标和流动点 -->
+      <div class="carousel-icons">
+        <div class="icon-item" data-target="0" title="Пароход">🚢</div>
+        <div class="dot-group" id="dotGroup1">
+          <span class="dot">☁️</span>
+          <span class="dot">☁️</span>
+          <span class="dot">☁️</span>
+        </div>
+        <div class="icon-item" data-target="1" title="Прогулка">🚶‍➡️</div>
+        <div class="dot-group" id="dotGroup2">
+          <span class="dot">✨</span>
+          <span class="dot">✨</span>
+          <span class="dot">✨</span>
+        </div>
+        <div class="icon-item" data-target="2" title="Вилла">🏡</div>
+      </div>
+    </section>
+
+    <section class="content-section bg-pale" id="museumSection">
+      <h3 class="content-title" style="font-weight: bold">Музей Гугун реликвий на острове Гуланъюй</h3>
+
+      <!-- 图片 + 文字 四周布局容器 -->
+      <div class="museum-layout">
+        <!-- 上部图片区（3张） -->
+        <div class="museum-row top-row" id="topImages"></div>
+
+        <!-- 中部：左侧图片区 + 文字 + 右侧图片区 -->
+        <div class="museum-middle">
+          <div class="museum-side left-side" id="leftImages"></div>
+          <div class="museum-text-container">
+            <p>
+              Представьте: старинное здание бывшей больницы на острове Гуланъюй, где сегодня расположился <span style="font-weight: bold;color: black">уникальный филиал Запретного города</span> — Музей иностранных культурных реликвий. Это единственное место в Китае, где собраны сокровища, некогда принадлежавшие императорскому дворцу, но имеющие заморское происхождение.
+              Коллекция поражает воображение: здесь и изящный фарфор из Европы, и тонкие лаковые изделия, и сверкающие стеклянные сосуды, и даже старинные научные приборы. Всего более 1200 экспонатов из Великобритании, Франции, России, Японии, Кореи и других стран. Постоянная экспозиция музея состоит из двух разделов: «Блеск процветающей империи» и «Лёгкие волны морских государств». В центре каждого из них — искусство, быт и коллекции императорского двора цинской династии. Вы увидите выдающиеся произведения древнего Китая, начиная с эпохи Шан: бронзу, фарфор, нефрит, эмалированную и стеклянную посуду, старинную мебель — а рядом с ними редкие реликвии, привезённые из разных стран мира. Все экспонаты удивляют разнообразием и великолепной сохранностью, словно время над ними не властно.
+            </p>
+          </div>
+          <div class="museum-side right-side" id="rightImages"></div>
+        </div>
+
+        <!-- 下部图片区（3张） -->
+        <div class="museum-row bottom-row" id="bottomImages"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="main.js"></script>
+<script>
+  (function() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const icons = document.querySelectorAll('.icon-item');
+    if (!slides.length || !prevBtn || !nextBtn) return;
+    let currentIndex = 0;
+    const total = slides.length;
+
+    function showSlide(index) {
+      if (index < 0) index = total - 1;
+      if (index >= total) index = 0;
+      slides.forEach((slide, i) => {
+        if (i === index) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+      currentIndex = index;
+    }
+
+    // 箭头点击
+    prevBtn.addEventListener('click', () => {
+      showSlide(currentIndex - 1);
+      playFlowAnimation('prev');
+    });
+    nextBtn.addEventListener('click', () => {
+      showSlide(currentIndex + 1);
+      playFlowAnimation('next');
+    });
+
+    icons.forEach(icon => {
+      icon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const targetIndex = parseInt(this.getAttribute('data-target'));
+        const oldIndex = currentIndex;
+        if (!isNaN(targetIndex) && targetIndex !== currentIndex) {
+          // 判断方向
+          const direction = targetIndex > currentIndex ? 'next' : 'prev';
+          showSlide(targetIndex);
+          playFlowAnimation(direction);
+        }
+        // 抖动动画保留
+        this.classList.add('icon-shake');
+        setTimeout(() => this.classList.remove('icon-shake'), 300);
+      });
+    });
+
+    // 键盘左右键支持
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') showSlide(currentIndex - 1);
+      if (e.key === 'ArrowRight') showSlide(currentIndex + 1);
+    });
+    // 播放流动动画（方向：左->右，根据当前切换方向）
+    function playFlowAnimation(direction) {
+      // direction: 'next' 或 'prev'
+      const group1 = document.getElementById('dotGroup1');
+      const group2 = document.getElementById('dotGroup2');
+      if (!group1 || !group2) return;
+
+      const dots1 = group1.querySelectorAll('.dot');
+      const dots2 = group2.querySelectorAll('.dot');
+
+      // 如果是切换到右侧（下一段），动画从左组到右组顺序播放
+      if (direction === 'next') {
+        animateDotsSequentially([...dots1, ...dots2]);
+      }
+      // 如果是切换到左侧（上一段），从右向左反向播放（可选，体现反向流动）
+      else if (direction === 'prev') {
+        animateDotsSequentially([...dots2.reverse(), ...dots1.reverse()]);
+      }
+    }
+
+    function animateDotsSequentially(dotsArray) {
+      dotsArray.forEach((dot, idx) => {
+        setTimeout(() => {
+          dot.classList.add('dot-flow');
+          setTimeout(() => dot.classList.remove('dot-flow'), 400);
+        }, idx * 80); // 每个点间隔80ms，形成波浪
+      });
+    }
+  })();
+  (function() {
+    // ================= 请在这里修改您的图片路径 =================
+    const imageUrls = [
+      "images/gu1.png",
+      "images/gu2.png",
+      "images/gu3.png",
+      "images/gu4.png",
+      "images/gu5.png",
+      "images/gu6.png",
+      "images/gu7.png",
+      "images/gu8.png",
+      "images/gu9.jpg",
+      "images/gu10.jpg",
+      "images/gu11.jpg"
+    ];
+    // 分配策略：上区3张，下区3张，左区2张，右区3张（共11张）
+    const topCount = 3;
+    const bottomCount = 3;
+    const leftCount = 2;
+    const rightCount = 3;
+
+    // 复制数组并打乱顺序（让每次刷新随机分配位置，但确保每张图只出现一次）
+    const shuffled = [...imageUrls];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    let idx = 0;
+    const topImages = shuffled.slice(idx, idx + topCount); idx += topCount;
+    const leftImages = shuffled.slice(idx, idx + leftCount); idx += leftCount;
+    const rightImages = shuffled.slice(idx, idx + rightCount); idx += rightCount;
+    const bottomImages = shuffled.slice(idx, idx + bottomCount);
+
+    // 创建图片元素并添加随机旋转
+    function createImage(src, alt) {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = alt;
+      img.className = 'museum-img-fixed';
+      const rotate = (Math.random() - 0.5) * 24;// -9deg ~ 9deg
+      img.style.transform = `rotate(${rotate}deg)`;
+      img.loading = 'lazy';
+      img.onerror = function() {
+        this.style.background = '#EADBC6';
+        this.style.content = '🖼️';
+        this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="%23D7422A"%3E%3Cpath d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 8h-4v4h-4v-4H6V9h4V5h4v4h4v2z"/%3E%3C/svg%3E';
+      };
+      return img;
+    }
+
+    const containerTop = document.getElementById('topImages');
+    const containerLeft = document.getElementById('leftImages');
+    const containerRight = document.getElementById('rightImages');
+    const containerBottom = document.getElementById('bottomImages');
+
+    if (containerTop) {
+      topImages.forEach((url, i) => {
+        containerTop.appendChild(createImage(url, `Экспонат сверху ${i+1}`));
+      });
+    }
+    if (containerLeft) {
+      leftImages.forEach((url, i) => {
+        containerLeft.appendChild(createImage(url, `Экспонат слева ${i+1}`));
+      });
+    }
+    if (containerRight) {
+      rightImages.forEach((url, i) => {
+        containerRight.appendChild(createImage(url, `Экспонат справа ${i+1}`));
+      });
+    }
+    if (containerBottom) {
+      bottomImages.forEach((url, i) => {
+        containerBottom.appendChild(createImage(url, `Экспонат снизу ${i+1}`));
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
