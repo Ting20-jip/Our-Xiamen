@@ -204,9 +204,12 @@
         }
         /* 调整标题大小（可选） */
         .guide-title,
-        .accommodation-content .highlight {
+        .accommodation-content {
           font-size: 1.1rem;
         }
+      .content-title {
+        font-size: 1.2rem;
+      }
     }
     .carousel-slide p {
       line-height: 1.8;
@@ -335,6 +338,27 @@
     @media (max-width: 768px) {
       .museum-img {
         width: 75px;
+      }
+      .museum-layout {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+      }
+      .museum-row {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+      }
+      .museum-middle {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+      }
+      .museum-text-container {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+      }
+      /* 如果底部还有多余空白，可以尝试移除最后一个子元素的边距 */
+      .museum-layout > :last-child {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
       }
     }
     .museum-layout {
@@ -490,9 +514,11 @@
         <button class="carousel-arrow carousel-arrow-left" id="prevBtn">‹</button>
         <div class="carousel-slides">
           <div class="carousel-slide active" style="display: flex; align-items: center;">
-            <p style="font-size: 1.5rem;">
-              <span class="highlight">Остров Гуланъюй</span> — это уникальное место, где оживает история Китая. Здесь располагалась военная база легендарного национального героя Чжэн Чэнгуна. Древняя тренировочная площадка хранит память о героическом прошлом: закрыв глаза, можно услышать отзвуки барабанного боя, эхом доносящегося из глубины трёхвековой истории. На прибрежных камнях сохранились многочисленные надписи, оставленные выдающимися поэтами и мыслителями минувших эпох.
+            <div class="guide-content">
+              <h3 class="guide-title" style="margin-top: 0;font-size: 1.5rem;">Остров Гуланъюй</h3>
+              <p style="font-size: 1.5rem;">Это уникальное место, где оживает история Китая. Здесь располагалась военная база легендарного национального героя Чжэн Чэнгуна. Древняя тренировочная площадка хранит память о героическом прошлом: закрыв глаза, можно услышать отзвуки барабанного боя, эхом доносящегося из глубины трёхвековой истории. На прибрежных камнях сохранились многочисленные надписи, оставленные выдающимися поэтами и мыслителями минувших эпох.
             </p>
+            </div>
           </div>
           <div class="carousel-slide">
             <div class="guide-content">
@@ -515,7 +541,7 @@
           </div>
           <div class="carousel-slide">
             <div class="accommodation-content">
-              <h3 class="highlight" style="font-size: 1.5rem">Где остановиться?</h3>
+              <h3 class="guide-title" style="font-size: 1.5rem;">Где остановиться?</h3>
               <p>Вилла «Хуанцзя Хуаюань» — уникальное место для проживания, известное как «Первая вилла Китая». Это не просто отель, а объект культурного наследия государственного значения, где современный сервис сочетается с атмосферой старинной аристократии. Стоимость проживания лишь незначительно превышает стандартный гостиничный тариф, а впечатления от пребывания останутся на всю жизнь.</p>
               <p class="conclusion">Гуланъюй, где каждый найдёт что-то особенное для себя.</p>
             </div>
