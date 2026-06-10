@@ -160,7 +160,21 @@
         font-size: 1.5rem;
       }
       .carousel-slides {
-        min-height: 580px;
+        height: auto !important;
+        min-height: 480px;
+      }
+      .carousel-slide {
+        position: relative;
+        height: auto;
+        display: block;
+        padding: 20px 10px;
+        align-items: flex-start;   /* 内容顶部对齐 */
+      }
+      .carousel-slide p,
+      .guide-content,
+      .accommodation-content {
+        width: 100%;
+        font-size: 1rem;
       }
     }
     .carousel-slide p {
@@ -223,6 +237,16 @@
       .dot-group {
         gap: 4px;
       }
+      .carousel-icons {
+        gap: 4px;
+        padding: 0 10px;
+        justify-content: flex-start; /* 左对齐，避免空隙不均导致换行 */
+      }
+      .icon-item {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+      }
     }
     .icon-item {
       font-size: 2.2rem;
@@ -253,13 +277,7 @@
       75% { transform: translateX(5px); }
       100% { transform: translateX(0); }
     }
-    @media (max-width: 768px) {
-      .icon-item {
-        width: 55px;
-        height: 55px;
-        font-size: 1.6rem;
-      }
-    }
+
     /* 博物馆散落图片 - 修复版 */
     #museumImagesContainer {
       pointer-events: none; /* 容器不拦截点击，但内部图片可点击 */

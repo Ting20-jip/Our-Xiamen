@@ -38,6 +38,9 @@ html {
 }
 
 body {
+    overflow-x: hidden;
+    word-wrap: break-word;
+    word-break: break-word;
     font-family: "JetBrains Mono", Inter, system-ui, sans-serif;
     color: var(--text);
     background-color: var(--cream);
@@ -95,30 +98,6 @@ a:hover {
     padding-top: 10px;
     padding-bottom: 10px;
     gap: 20px;
-}
-
-.logo-area {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-}
-
-.logo-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    color: inherit;
-}
-
-.logo-icon {
-    flex-shrink: 0;
-}
-
-.logo-text {
-    display: flex;
-    flex-direction: column;
 }
 
 .site-title {

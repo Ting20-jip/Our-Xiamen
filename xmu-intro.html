@@ -6,6 +6,7 @@
     <title>Сямэньский университет</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* ========== 桌面端原有样式 ========== */
         .campus-map-section {
             padding: 40px 0;
             background: #f9f6f1;
@@ -13,7 +14,7 @@
         .map-interactive-container {
             position: relative;
             width: 100%;
-            max-width: 100%;   /* 改为 100%，让地图占满容器宽度 */
+            max-width: 100%;
             text-align: center;
             margin: 0 auto;
             z-index: 5;
@@ -33,12 +34,11 @@
             opacity: 0.7;
         }
 
-        /* ========== 8个图标样式（无圆圈背景，明显放大） ========== */
+        /* 桌面端图标样式 */
         .map-icon {
             position: absolute;
             background: transparent;
             border: none;
-            /* 保留可点击区域和内边距 */
             padding: 8px 12px;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -46,7 +46,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;     /* emoji 放大 */
+            font-size: 1.8rem;
             font-weight: normal;
             color: var(--blue);
             text-align: center;
@@ -71,7 +71,6 @@
             transform: scale(1.05);
             background-color: rgba(255,200,180,0.8);
         }
-        /* 点击时明显放大 */
         .map-icon.active {
             transform: scale(1.3) !important;
             background-color: var(--red);
@@ -84,7 +83,7 @@
             color: white;
         }
 
-        /* 八个图标的位置（可根据地图照片微调百分比） */
+        /* 桌面端图标位置（保持不变） */
         .map-icon[data-spot="statue"] { top: 42%; left: 15%; }
         .map-icon[data-spot="qunxian"] { top: 38%; left: 25%; }
         .map-icon[data-spot="love_valley"] { top: 15%; right: 20%; }
@@ -94,38 +93,28 @@
         .map-icon[data-spot="shangxian"] { bottom: 21%; right: 54%; }
         .map-icon[data-spot="jiageng"] { top: 32%; left: 33%; }
 
-        /* 响应式调整：移动端图标稍小，位置微调 */
-        @media (max-width: 768px) {
-            .map-icon {
-                font-size: 1.2rem;
-                padding: 4px 8px;
-            }
-            .map-icon span {
-                font-size: 0.5rem;
-            }
-        }
-        /* 悬浮图片样式 */
-        .floating-img {
+        /* 桌面端悬浮图片（绝对定位） */
+        .desktop-floating-img {
             position: absolute;
             top: 8%;
             left: 5%;
             width: 4cm;
-            height: 6cm;
-            object-fit: cover;     /* 保证图片填充且不变形 */
-            border-radius: 16px;   /* 可选：圆角 */
+            height: auto;
+            object-fit: cover;
+            border-radius: 16px;
             box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-            z-index: 8;            /* 高于地图背景，低于图标（图标 z-index:5 但点击时 active 会到20，但8处于中间，不影响点击） */
-            pointer-events: none;  /* 让图片不拦截鼠标点击，图标仍可点 */
+            z-index: 8;
+            pointer-events: none;
         }
 
-        /* 悬浮文字面板（出现在地图上） */
+        /* 悬浮面板（桌面端和移动端通用） */
         .floating-panel {
             position: absolute;
             background: rgba(255, 248, 240, 0.95);
             backdrop-filter: blur(4px);
             border-radius: 20px;
             padding: 12px 18px;
-            width: 400px;           /* 调大宽度 */
+            width: 400px;
             max-width: 85vw;
             box-shadow: 0 8px 24px rgba(0,0,0,0.2);
             border-left: 6px solid var(--red);
@@ -159,15 +148,7 @@
             clear: both;
             display: table;
         }
-        @media (max-width: 768px) {
-            .floating-panel {
-                width: 260px;
-                padding: 8px 12px;
-            }
-            .floating-panel h4 { font-size: 0.9rem; }
-            .floating-panel p { font-size: 0.75rem; }
-            .floating-panel img { width: 45px; height: 45px; }
-        }
+
         /* 独立标题板块 */
         .cute-title-section {
             text-align: center;
@@ -193,40 +174,55 @@
             padding: 6px 20px;
             border-radius: 40px;
         }
-        @media (max-width: 768px) {
-            .cute-title-section .section-title {
-                font-size: 1.2rem;
-                padding: 6px 16px;
-            }
-            .cute-title-section .section-subtitle {
-                font-size: 0.9rem;
-            }
+
+        /* 移动端专用容器（默认隐藏） */
+        .mobile-icon-container {
+            display: none;
         }
-        .cute-title-content {
+        .vertical-icons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+        .vertical-icon-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(255, 248, 240, 0.9);
+            padding: 8px 12px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--gold-light);
+            font-size: 0.9rem;
+        }
+        .vertical-icon-item:hover {
+            background: var(--red);
+            color: white;
+            transform: scale(1.02);
+        }
+        .vertical-icon-item .v-emoji {
+            font-size: 1.5rem;
+        }
+        .vertical-icon-item .v-text {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow-x: auto;
+            text-overflow: ellipsis;
         }
 
-        .cute-title-text {
-            text-align: center;
+        /* 移动端 weijie 图片样式（用于新容器） */
+        .mobile-floating-img {
+            width: 120px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+            pointer-events: none;
         }
 
-        /* 移动端：小于 600px 时改为垂直排列 */
-        @media (max-width: 600px) {
-            .cute-title-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .cute-title-avatar img {
-                width: 3cm;
-                height: 1.5cm;
-            }
-        }
-
-        /* banner 背景图片样式（保持不变） */
+        /* banner 背景图片样式 */
         .banner-xmu {
             background: none !important;
             position: relative;
@@ -262,6 +258,55 @@
         .banner-xmu .page-banner-subtitle {
             font-size: 1.2rem;
             animation-delay: 0.2s;
+        }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== 移动端专用样式 (≤768px) ========== */
+        @media (max-width: 768px) {
+            /* 隐藏绝对定位的图标（桌面端的地图图标） */
+            .map-icon {
+                display: none !important;
+            }
+            /* 隐藏桌面端的 weijie 图片 */
+            .desktop-floating-img {
+                display: none !important;
+            }
+            /* 移动端：显示新的图片+竖向按钮容器 */
+            .mobile-icon-container {
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 15px;
+                margin: 20px 10px;
+                background: transparent;
+            }
+            /* 移动端悬浮面板：固定于底部，不超出屏幕 */
+            .floating-panel {
+                width: 90vw !important;
+                left: 5% !important;
+                right: 5% !important;
+                bottom: 20px;
+                top: auto !important;
+                transform: none !important;
+                max-height: 70vh;
+                overflow-y: auto;
+            }
+            /* 缩小banner副标题字号 */
+            .banner-xmu .page-banner-subtitle {
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+            /* 调整可爱标题区字号 */
+            .cute-title-section .section-title {
+                font-size: 1.2rem;
+                padding: 6px 16px;
+            }
+            .cute-title-section .section-subtitle {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -314,7 +359,11 @@
             <div class="map-center">
                 <!-- 地图图片 -->
                 <img src="images/xiada-map.png" alt="Карта кампуса" class="map-image">
-                <!-- 8个图标 -->
+
+                <!-- 桌面端 weijie 图片（绝对定位，桌面端显示） -->
+                <img src="images/weijie.png" alt="weijie" class="desktop-floating-img">
+
+                <!-- 8个绝对定位图标（桌面端使用） -->
                 <div class="map-icon" data-spot="statue">🎩<span>Статуя Чэнь Цзягэна</span></div>
                 <div class="map-icon" data-spot="qunxian">🏛️<span>Здания Цюньсянь</span></div>
                 <div class="map-icon" data-spot="love_valley">💕<span>Ущелье влюблённых</span></div>
@@ -323,21 +372,24 @@
                 <div class="map-icon" data-spot="jiannan">🏫<span>Комплекс Цзяньнань</span></div>
                 <div class="map-icon" data-spot="shangxian">⚽<span>Стадион Шансянь</span></div>
                 <div class="map-icon" data-spot="jiageng">🏢<span>Здание Сунъэнь</span></div>
-                <img src="images/weijie.png" alt="renxiang" class="floating-img">
             </div>
+        </div>
+
+        <!-- 移动端专用容器：weijie图片 + 竖向图标列表（桌面端隐藏，移动端显示） -->
+        <div class="mobile-icon-container">
+            <img src="images/weijie.png" alt="weijie" class="mobile-floating-img">
+            <div class="vertical-icons-list" id="mobileIconsList"></div>
         </div>
     </div>
 </main>
 
 <script src="main.js"></script>
 <script>
-    // 景点数据（标题、描述、图片）
+    // ========== 景点数据 ==========
     const spotsData = {
         statue: {
             title: 'Статуя Чэнь Цзягэна',
-            desc: 'При входе в университет, первое, что привлекает внимание - статуя  Чэнь Цзягэна, который является основателем Сямэньского университета. Статуя установлена\n' +
-                'прямо перед старинным зданием Цюньсянь, в котором находится Музей истории университета. Памятник установили к 110-летию со дня рождения Чэнь Цзягэна.\n' +
-                'Бронзовая статуя высотой 2,8 метра изображает Чэнь Цзягэна с сосредоточенным взглядом, устремлённым вдаль, словно он и сегодня продолжает следить за развитием своего дела.',
+            desc: 'При входе в университет, первое, что привлекает внимание - статуя  Чэнь Цзягэна, который является основателем Сямэньского университета. Статуя установлена прямо перед старинным зданием Цюньсянь, в котором находится Музей истории университета. Памятник установили к 110-летию со дня рождения Чэнь Цзягэна. Бронзовая статуя высотой 2,8 метра изображает Чэнь Цзягэна с сосредоточенным взглядом, устремлённым вдаль.',
             img: 'images/diaoxiang.jpg'
         },
         qunxian: {
@@ -347,27 +399,24 @@
         },
         love_valley: {
             title: 'Ущелье влюблённых',
-            desc: 'Это укромный уголок университета о котором знают далеко не все. Водохранилище окружено зелёными холмами, а его поверхность, словно зеркало, отражает небо и деревья. Здесь можно заметить тренировочные лодки университетской команды по гребле.\n' +
-                'В последние годы это место особенно полюбилось студентам и гостям университета, в первую очередь тем, кто ценит спокойствие и красоту природы. В 2014 году водохранилищу присвоили официальное название «Сыюаньгу» («пьёшь воду - помни об её источнике», то есть «не забывай своих корней»), но среди студентов по прежнему популярно его поэтичное название — «Ущелье влюблённых».',
+            desc: 'Это укромный уголок университета о котором знают далеко не все. Водохранилище окружено зелёными холмами, а его поверхность, словно зеркало, отражает небо и деревья. Здесь можно заметить тренировочные лодки университетской команды по греблю. В 2014 году водохранилищу присвоили официальное название «Сыюаньгу», но среди студентов популярно название «Ущелье влюблённых».',
             img: 'images/qingrengu.jpg'
         },
         furong_tunnel: {
             title: 'Туннель Фужун',
-            desc: 'Внутри туннеля расположены сотни граффити-работ студентов. Они охватывают все аспекты студенческой жизни: увлечения и хобби,\n' +
-                'кинофильмы и телесериалы, памятные надписи в честь выпуска и т.д. Здесь также много мемориальных росписей, созданных официально университетом. Туннель стал настоящей художественной галереей и излюбленным местом для прогулок студентов и туристов. ',
+            desc: 'Внутри туннеля расположены сотни граффити-работ студентов. Они охватывают все аспекты студенческой жизни: увлечения, кино, памятные надписи. Туннель стал настоящей художественной галереей и излюбленным местом для прогулок студентов и туристов.',
             img: 'images/suidao.jpg'
         },
         furong_lake: {
             title: 'Озеро Фужун',
-            desc: 'Озеро Фужун расположено в самом сердце кампуса Сямэньского университета. Его название связано с лотосом.\n' +
-                 'С точки зрения фэншуй, вода здесь собирает энергию «ци», удерживает благоприятные потоки и наполняет кампус живительной силой. Озеро давно стало местом притяжения и отдыха для студентов и гостей. Главное украшение озера - чёрные лебеди.',
+            desc: 'Озеро Фужун расположено в самом сердце кампуса.Его название связано с лотосом.\n' +
+                'С точки зрения фэншуй, вода здесь собирает энергию «ци», удерживает благоприятные потоки и наполняет кампус живительной силой. Озеро давно стало местом притяжения и отдыха для студентов и гостей. Главное украшение озера - чёрные лебеди.',
             img: 'images/furonghu.png'
         },
         jiannan: {
-            title: 'Архитектурный комплекс Цзяньнань',
-            desc: 'Сто с лишним лет назад старик стоял на берегу моря, указал на синюю гладь и сказал: «Я хочу, чтобы иностранные корабли, входя в Сямэньскую бухту, первым делом видели китайский университет». \n' +
-                'Спроектированный им комплекс «Цзяньнань» и сегодня украшает южную часть кампуса Сямэньского университета, обращённую к морю. Центральное место занимает величественный и монументальный Зал собраний Цзяньнань. \n' +
-                'По бокам от него, словно пять стражей, выстроились корпуса Наньгуан, Чэнчжи, Наньань и Чэнъи. Сегодня в Зале собраний проходят театральные постановки и культурные мероприятия. Под сводами старинного здания по-прежнему звучат голоса, смех и аплодисменты, наполняя его атмосферой жизни и творчества.',
+            title: 'Комплекс Цзяньнань',
+            desc: 'Сто с лишним лет назад Чэнь Цзягэн стоял на берегу моря, указывая на синюю гладь и сказал: «Я хочу, чтобы иностранные корабли, входя в Сямэньскую бухту, первым делом видели китайский университет».\n' +
+                'Спроектированный им комплекс «Цзяньнань» и сегодня украшает южную часть кампуса Сямэньского университета, обращённую к морю. Центральное место занимает величественный и монументальный Зал собраний Цзяньнань.По бокам от него, словно пять стражей, выстроились корпуса Наньгуан, Чэнчжи, Наньань и Чэньи. Сегодня в Зале собраний Цзяньнань проходят театральные постановки и культурные мероприятия. Под сводами старинного здания по-прежнему звучат голоса, смех и аплодисменты, наполняя его атмосферой жизни и творчества.',
             img: 'images/jiannan.png'
         },
         shangxian: {
@@ -377,46 +426,47 @@
         },
         jiageng: {
             title: 'Здание Сунъэнь',
-            desc: 'Это главное здание Сямэньского университета, расположенное в центре кампуса. Оно легко узнаваемо благодаря башне с часами и сочетанию китайского и западного архитектурных стилей. Название «Сунъэнь» можно перевести как «Восхваление благодарности». Здание было построено на средства, пожертвованные выпускниками из Таиланда в знак благодарности и признательности Сямэньскому университету. Сегодня здание является не только административным центром университета, но и одной из самых узнаваемых достопримечательностей кампуса, олицетворяя дух благодарности и преемственности поколений.',
+            desc: 'Здание Сунъэнь — главное здание Сямэньского университета, расположенное в центре кампуса. Оно легко узнаваемо благодаря башне с часами и сочетанию китайского и западного архитектурных стилей. Название «Сунъэнь» можно перевести как «Восхваление благодарности». Здание было построено на средства, пожертвованные выпускниками из Таиланда в знак благодарности и признательности Сямэньскому университету. Сегодня здание является не только административным центром университета, но и одной из самых узнаваемых достопримечательностей кампуса, олицетворяя дух благодарности и преемственности поколений.',
             img: 'images/jiagenglou.jpg'
         }
     };
 
-    const icons = document.querySelectorAll('.map-icon');
-    let currentPanel = null;   // 当前打开的面板
-    let currentIcon = null;    // 当前激活的图标
+    // ========== 全局变量 ==========
+    let currentPanel = null;
+    let currentIcon = null;
 
-    // 关闭当前面板
+    // ========== 关闭面板 ==========
     function closePanel() {
         if (currentPanel) {
             currentPanel.remove();
             currentPanel = null;
         }
-        if (currentIcon) {
+        if (currentIcon && currentIcon.classList) {
             currentIcon.classList.remove('active');
-            currentIcon = null;
         }
+        currentIcon = null;
     }
 
-    // 在图标旁边显示悬浮面板
+    // ========== 显示悬浮面板 ==========
     function showPanel(icon, spotKey) {
         const data = spotsData[spotKey];
         if (!data) return;
 
-        // 如果已经打开同一个图标的面板，则关闭
+        // 如果点击的是同一个图标且已打开，则关闭
         if (currentIcon === icon && currentPanel) {
             closePanel();
             return;
         }
 
-        // 关闭已有面板
         closePanel();
 
-        // 高亮当前图标
-        icon.classList.add('active');
-        currentIcon = icon;
+        // 高亮图标（仅当 icon 是 DOM 元素且有 classList 时）
+        if (icon && typeof icon.classList !== 'undefined') {
+            icon.classList.add('active');
+            currentIcon = icon;
+        }
 
-        // 创建悬浮面板
+        // 创建面板
         const panel = document.createElement('div');
         panel.className = 'floating-panel';
         panel.innerHTML = `
@@ -426,39 +476,101 @@
                 <p>${data.desc}</p>
             </div>
         `;
-        document.querySelector('.map-center').appendChild(panel);
-        currentPanel = panel;
-        panel.style.display = 'block';   // ⭐ 关键修复：让面板可见
 
-        // 计算面板位置（相对于图标偏移，避免覆盖）
-        const iconRect = icon.getBoundingClientRect();
-        const mapRect = document.querySelector('.map-center').getBoundingClientRect();
-        let left = iconRect.left - mapRect.left + 50;  // 图标右侧偏移
-        let top = iconRect.top - mapRect.top - 20;     // 图标上方偏移
-        // 边界检查（防止超出地图右侧）
-        if (left + 340 > mapRect.width) left = iconRect.left - mapRect.left - 350;
-        if (top < 0) top = iconRect.top - mapRect.top + 40;
-        panel.style.left = left + 'px';
-        panel.style.top = top + 'px';
+        // 桌面端：将面板添加到 .map-center 内，并相对于地图容器定位
+        const mapContainer = document.querySelector('.map-center');
+        if (window.innerWidth > 768 && mapContainer) {
+            mapContainer.appendChild(panel);
+            panel.style.display = 'block';
+
+            // 计算面板位置（相对于 .map-center）
+            const iconRect = icon.getBoundingClientRect();
+            const containerRect = mapContainer.getBoundingClientRect();
+            // 面板默认宽度 400px，防止超出右侧边界
+            let left = iconRect.left - containerRect.left + 60;   // 图标右侧偏移
+            let top = iconRect.top - containerRect.top - 20;      // 图标上方偏移
+            // 边界检查
+            if (left + 400 > containerRect.width) {
+                left = iconRect.left - containerRect.left - 420;   // 显示在左侧
+            }
+            if (top < 0) top = iconRect.top - containerRect.top + 40;
+            panel.style.left = left + 'px';
+            panel.style.top = top + 'px';
+        } else {
+            // 移动端：添加到 body，使用底部固定样式（CSS 已处理）
+            document.body.appendChild(panel);
+            panel.style.display = 'block';
+        }
+        currentPanel = panel;
     }
 
-    // 绑定点击事件
-    icons.forEach(icon => {
+    // ========== 绑定桌面端图标点击事件 ==========
+    const desktopIcons = document.querySelectorAll('.map-icon');
+    desktopIcons.forEach(icon => {
         icon.addEventListener('click', function(e) {
             e.stopPropagation();
             const spot = this.getAttribute('data-spot');
-            if (!spot) return;
-            showPanel(this, spot);
+            if (spot) showPanel(this, spot);
         });
     });
 
-    // 点击地图空白处（非图标）关闭面板（可选）
-    document.querySelector('.map-center').addEventListener('click', function(e) {
-        if (!e.target.closest('.map-icon')) {
-            closePanel();
+    // ========== 生成移动端竖向列表（并绑定事件） ==========
+    function buildVerticalIcons() {
+        const container = document.getElementById('mobileIconsList');
+        if (!container) return;
+        container.innerHTML = '';
+        const emojiMap = {
+            statue: '🎩',
+            qunxian: '🏛️',
+            love_valley: '💕',
+            furong_tunnel: '🎨',
+            furong_lake: '🦢',
+            jiannan: '🏫',
+            shangxian: '⚽',
+            jiageng: '🏢'
+        };
+        const order = ['statue', 'qunxian', 'love_valley', 'furong_tunnel', 'furong_lake', 'jiannan', 'shangxian', 'jiageng'];
+        for (let key of order) {
+            const data = spotsData[key];
+            if (!data) continue;
+            const item = document.createElement('div');
+            item.className = 'vertical-icon-item';
+            item.setAttribute('data-spot', key);
+            item.innerHTML = `
+                <span class="v-emoji">${emojiMap[key]}</span>
+                <span class="v-text">${data.title}</span>
+            `;
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showPanel(item, key);
+            });
+            container.appendChild(item);
+        }
+    }
+
+    // 点击地图空白处关闭面板（桌面端）
+    const mapCenter = document.querySelector('.map-center');
+    if (mapCenter) {
+        mapCenter.addEventListener('click', function(e) {
+            if (!e.target.closest('.map-icon') && !e.target.closest('.floating-panel')) {
+                closePanel();
+            }
+        });
+    }
+
+    // 初始化移动端列表（仅在移动端生成）
+    if (window.innerWidth <= 768) {
+        buildVerticalIcons();
+    }
+    // 监听窗口大小变化，动态重建或清理
+    window.addEventListener('resize', function() {
+        if (window.innerWidth <= 768) {
+            buildVerticalIcons();
+        } else {
+            const container = document.getElementById('mobileIconsList');
+            if (container) container.innerHTML = '';
         }
     });
 </script>
-
 </body>
 </html>
