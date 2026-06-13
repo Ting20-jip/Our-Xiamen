@@ -269,6 +269,8 @@
             /* 1. 显示地图图标，但隐藏文字标签 */
             .map-icon {
                 display: flex !important;
+                font-size: 1rem !important;
+                padding: 4px 6px !important;
             }
             .map-icon span {
                 display: none !important;
@@ -288,6 +290,20 @@
                 align-items: flex-start;
                 gap: 15px;
                 margin: 20px 10px;
+            }
+            .mobile-icon-container {
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
+            }
+
+            .floating-panel {
+                margin: 0 !important;
+            }
+
+            .vertical-icons-list {
+                display: none !important;
+                height: 0 !important;
+                overflow: hidden !important;
             }
 
             /* 4. weijie 图片缩小至 80%，左边距缩小 */
@@ -389,10 +405,10 @@
         <div class="map-interactive-container">
             <div class="map-center">
                 <!-- 地图图片 -->
-                <img src="images/xiada-map.png" alt="Карта кампуса" class="map-image">
+                <img src="images/xiada-map.jpg" alt="Карта кампуса" class="map-image">
 
                 <!-- 桌面端 weijie 图片（绝对定位，桌面端显示） -->
-                <img src="images/weijie.png" alt="weijie" class="desktop-floating-img">
+                <img src="images/weijie.jpg" alt="weijie" class="desktop-floating-img">
 
                 <!-- 8个绝对定位图标（桌面端使用） -->
                 <div class="map-icon" data-spot="statue">🎩<span>Статуя Чэнь Цзягэна</span></div>
@@ -408,7 +424,7 @@
 
         <!-- 移动端专用容器：weijie图片 + 竖向图标列表（桌面端隐藏，移动端显示） -->
         <div class="mobile-icon-container">
-            <img src="images/weijie.png" alt="weijie" class="mobile-floating-img">
+            <img src="images/weijie.jpg" alt="weijie" class="mobile-floating-img">
             <div class="vertical-icons-list" id="mobileIconsList"></div>
         </div>
     </div>
@@ -442,13 +458,13 @@
             title: 'Озеро Фужун',
             desc: 'Озеро Фужун расположено в самом сердце кампуса.Его название связано с лотосом.\n' +
                 'С точки зрения фэншуй, вода здесь собирает энергию «ци», удерживает благоприятные потоки и наполняет кампус живительной силой. Озеро давно стало местом притяжения и отдыха для студентов и гостей. Главное украшение озера - чёрные лебеди.',
-            img: 'images/furonghu.png'
+            img: 'images/furonghu.jpg'
         },
         jiannan: {
             title: 'Комплекс Цзяньнань',
             desc: 'Сто с лишним лет назад Чэнь Цзягэн стоял на берегу моря, указывая на синюю гладь и сказал: «Я хочу, чтобы иностранные корабли, входя в Сямэньскую бухту, первым делом видели китайский университет».\n' +
                 'Спроектированный им комплекс «Цзяньнань» и сегодня украшает южную часть кампуса Сямэньского университета, обращённую к морю. Центральное место занимает величественный и монументальный Зал собраний Цзяньнань.По бокам от него, словно пять стражей, выстроились корпуса Наньгуан, Чэнчжи, Наньань и Чэньи. Сегодня в Зале собраний Цзяньнань проходят театральные постановки и культурные мероприятия. Под сводами старинного здания по-прежнему звучат голоса, смех и аплодисменты, наполняя его атмосферой жизни и творчества.',
-            img: 'images/jiannan.png'
+            img: 'images/jiannan.jpg'
         },
         shangxian: {
             title: 'Стадион Шансянь',
